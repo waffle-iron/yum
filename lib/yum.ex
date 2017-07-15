@@ -1,0 +1,2 @@
+defmodule Yum do
+end
