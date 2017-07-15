@@ -2,13 +2,13 @@ defmodule Yum.Data do
     defp load(path), do: File.read!(path) |> Tomlex.load
 
     @path "data/Food-Data"
-    def diets(), do: load(Path.join(@path, "translations/diet-names.toml"))
+    def diets(data \\ @path), do: load(Path.join(data, "translations/diet-names.toml"))
 
-    def allergens(), do: load(Path.join(@path, "translations/allergen-names.toml"))
+    def allergens(data \\ @path), do: load(Path.join(data, "translations/allergen-names.toml"))
 
-    def ingredients(group \\ ""), do: load_tree(Path.join([@path, "ingredients", group]))
+    def ingredients(group \\ "", data \\ @path), do: load_tree(Path.join([data, "ingredients", group]))
 
-    def cuisines(group \\ ""), do: load_tree(Path.join([@path, "cuisines", group]))
+    def cuisines(group \\ "", data \\ @path), do: load_tree(Path.join([data, "cuisines", group]))
 
     defp load_tree(path) do
         Path.wildcard(Path.join(path, "**/*.toml"))
