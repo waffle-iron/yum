@@ -29,6 +29,6 @@ defmodule Yum.Mixfile do
     #
     # Type "mix help deps" for more examples and options
     defp deps do
-        []
+        [{ :tomlex, github: "zamith/tomlex" }]
     end
 end
