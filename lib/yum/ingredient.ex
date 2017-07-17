@@ -4,8 +4,7 @@ defmodule Yum.Ingredient do
         translation: %{},
         exclude_diet: [],
         exclude_allergen: [],
-        nutrition: %{},
-        group: nil
+        nutrition: %{}
     ]
 
     def new(data), do: Enum.reduce(data, [], &new(&1, &2, %Yum.Ingredient{}))
@@ -13,8 +12,7 @@ defmodule Yum.Ingredient do
     defp new({ key, value = %{ __info__: info } }, ingredients, group) do
         ingredient = %Yum.Ingredient{
             ref: "#{group.ref}/#{key}",
-            translation: info.translation,
-            group: group.ref
+            translation: info.translation
         }
         |> new_exclude_diet(info, group)
         |> new_exclude_allergen(value, group)
