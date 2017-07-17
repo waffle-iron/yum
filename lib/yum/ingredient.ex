@@ -41,4 +41,9 @@ defmodule Yum.Ingredient do
         String.split(ref, "/")
         |> create_parent_ref
     end
+
+    def name(%Yum.Ingredient{ ref: ref }) do
+        String.split(ref, "/")
+        |> List.last
+    end
 end
