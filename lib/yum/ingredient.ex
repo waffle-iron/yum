@@ -30,4 +30,15 @@ defmodule Yum.Ingredient do
 
     defp new_nutrition(ingredient, %{ "nutrition": nutrition }), do: %{ ingredient | nutrition: nutrition }
     defp new_nutrition(ingredient, _), do: ingredient
+
+    defp create_parent_ref([_|groups]), do: create_parent_ref(groups, "")
+
+    defp create_parent_ref([_], ""), do: nil
+    defp create_parent_ref([_], ref), do: ref
+    defp create_parent_ref([current|groups], ref), do: create_parent_ref(groups, "#{ref}/#{current}")
+
+    def group_ref(%Yum.Ingredient{ ref: ref }) do
+        String.split(ref, "/")
+        |> create_parent_ref
+    end
 end
