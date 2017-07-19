@@ -46,4 +46,6 @@ defmodule Yum.Ingredient do
         String.split(ref, "/")
         |> List.last
     end
+
+    def ref_hash(%Yum.Ingredient{ ref: ref }, algo \\ :sha), do: :crypto.hash(algo, ref)
 end
