@@ -1,4 +1,6 @@
 defmodule Yum.Ingredient do
+    use Bitwise
+
     defstruct [
         ref: nil,
         translation: %{},
@@ -48,4 +50,22 @@ defmodule Yum.Ingredient do
     end
 
     def ref_hash(%Yum.Ingredient{ ref: ref }, algo \\ :sha), do: :crypto.hash(algo, ref)
+
+    @encode_charset Enum.zip('abcdefghijklmnopqrstuvwxyz-/', 1..31)
+
+    defp encode_ref(ref, encoding \\ <<>>)
+    for { chr, index } <- @encode_charset do
+        defp encode_ref(<<unquote(chr), ref :: binary>>, encoding), do: encode_ref(ref, <<encoding :: bitstring, unquote(index) :: size(5)>>)
+    end
+    defp encode_ref("", encoding), do: encoding
+
+    defp decode_ref(encoding, ref \\ "")
+    for { chr, index } <- @encode_charset do
+        defp decode_ref(<<unquote(index) :: size(5), encoding :: bitstring>>, ref), do: decode_ref(encoding, ref <> unquote(<<chr>>))
+    end
+    defp decode_ref(<<>>, ref), do: ref
+
+    def ref_encode(%Yum.Ingredient{ ref: ref }), do: encode_ref(ref)
+
+    def ref_decode(ref), do: decode_ref(ref)
 end
