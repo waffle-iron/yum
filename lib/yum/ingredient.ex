@@ -64,6 +64,7 @@ defmodule Yum.Ingredient do
         defp decode_ref(<<unquote(index) :: size(5), encoding :: bitstring>>, ref), do: decode_ref(encoding, ref <> unquote(<<chr>>))
     end
     defp decode_ref(<<>>, ref), do: ref
+    defp decode_ref(<<0 :: size(5), _ :: bitstring>>, ref), do: ref
 
     def ref_encode(%Yum.Ingredient{ ref: ref }), do: encode_ref(ref)
 
