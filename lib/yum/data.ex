@@ -1,23 +1,23 @@
 defmodule Yum.Data do
     @type translation :: %{ optional(:term) => String.t, optional(:adj) => String.t, optional(atom) => translation }
-    @type locales :: %{ optional(atom) => translation }
-    @type ingredients :: %{ optional(String.t) => ingredients, optional(:__info__) => %{ optional(:translation) => locales, optional(:"exclude-diet") => [String.t], optional(:"exclude-allergen") => [String.t], optional(:nutrition) => %{ optional(atom) => any } } }
-    @type cuisines :: %{ optional(String.t) => cuisines, optional(:__info__) => %{ optional(:translation) => locales, optional(:nutrition) => %{ optional(atom) => any } } }
+    @type translation_tree :: %{ optional(atom) => translation }
+    @type ingredient_tree :: %{ optional(String.t) => ingredient_tree, optional(:__info__) => %{ optional(:translation) => translation_tree, optional(:"exclude-diet") => [String.t], optional(:"exclude-allergen") => [String.t], optional(:nutrition) => %{ optional(atom) => any } } }
+    @type cuisine_tree :: %{ optional(String.t) => cuisine_tree, optional(:__info__) => %{ optional(:translation) => translation_tree, optional(:nutrition) => %{ optional(atom) => any } } }
 
     defp load(path), do: File.read!(path) |> Tomlex.load
 
     @path "data/Food-Data"
 
-    @spec diets(String.t) :: locales
+    @spec diets(String.t) :: translation_tree
     def diets(data \\ @path), do: load(Path.join(data, "translations/diet-names.toml"))
 
-    @spec allergens(String.t) :: locales
+    @spec allergens(String.t) :: translation_tree
     def allergens(data \\ @path), do: load(Path.join(data, "translations/allergen-names.toml"))
 
-    @spec ingredients(String.t) :: ingredients
+    @spec ingredients(String.t) :: ingredient_tree
     def ingredients(group \\ "", data \\ @path), do: load_tree(Path.join([data, "ingredients", group]))
 
-    @spec cuisines(String.t) :: cuisines
+    @spec cuisines(String.t) :: cuisine_tree
     def cuisines(group \\ "", data \\ @path), do: load_tree(Path.join([data, "cuisines", group]))
 
     defp load_tree(path) do
