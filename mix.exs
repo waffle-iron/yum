@@ -8,7 +8,8 @@ defmodule Yum.Mixfile do
             elixir: "~> 1.4",
             build_embedded: Mix.env == :prod,
             start_permanent: Mix.env == :prod,
-            deps: deps()
+            deps: deps(),
+            dialyzer: [plt_add_deps: :transitive]
         ]
     end
 
