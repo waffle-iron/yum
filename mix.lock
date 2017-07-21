@@ -1,1 +1,2 @@
-%{"tomlex": {:git, "https://github.com/zamith/tomlex.git", "3021ac8314b898a629ad5002ae8be86ead0b388d", []}}
+%{"toml_elixir": {:hex, :toml_elixir, "1.1.0", "ae0b11a77328e3a42dfb260939099f5d3aa5d424b29e444c0b1e203faa994fc3", [:mix], []},
+  "tomlex": {:git, "https://github.com/zamith/tomlex.git", "3021ac8314b898a629ad5002ae8be86ead0b388d", []}}

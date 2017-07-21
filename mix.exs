@@ -30,6 +30,6 @@ defmodule Yum.Mixfile do
     #
     # Type "mix help deps" for more examples and options
     defp deps do
-        [{ :tomlex, github: "zamith/tomlex" }]
+        [{ :toml_elixir, "~> 1.1" }]
     end
 end

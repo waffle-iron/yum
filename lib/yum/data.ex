@@ -1,10 +1,13 @@
 defmodule Yum.Data do
-    @type translation :: %{ optional(:term) => String.t, optional(:adj) => String.t, optional(atom) => translation }
-    @type translation_tree :: %{ optional(atom) => translation }
-    @type ingredient_tree :: %{ optional(String.t) => ingredient_tree, optional(:__info__) => %{ optional(:translation) => translation_tree, optional(:"exclude-diet") => [String.t], optional(:"exclude-allergen") => [String.t], optional(:nutrition) => %{ optional(atom) => any } } }
-    @type cuisine_tree :: %{ optional(String.t) => cuisine_tree, optional(:__info__) => %{ optional(:translation) => translation_tree, optional(:nutrition) => %{ optional(atom) => any } } }
+    @type translation :: %{ optional(String.t) => translation | String.t }
+    @type translation_tree :: %{ optional(String.t) => translation }
+    @type diet_list :: [String.t]
+    @type allergen_list :: [String.t]
+    @type nutrition :: %{ optional(String.t) => any }
+    @type ingredient_tree :: %{ optional(String.t) => ingredient_tree, optional(:__info__) => %{ optional(String.t) => translation_tree | diet_list | allergen_list | nutrition } }
+    @type cuisine_tree :: %{ optional(String.t) => cuisine_tree, optional(:__info__) => %{ optional(String.t) => translation_tree | nutrition } }
 
-    defp load(path), do: File.read!(path) |> Tomlex.load
+    defp load(path), do: TomlElixir.parse_file!(path)
 
     @path "data/Food-Data"
 

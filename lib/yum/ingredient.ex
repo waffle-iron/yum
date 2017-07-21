@@ -9,7 +9,7 @@ defmodule Yum.Ingredient do
         nutrition: %{}
     ]
 
-    @type t :: %Yum.Ingredient{ ref: String.t, translation: Yum.Data.locales, exclude_diet: [String.t], exclude_allergen: [String.t], nutrition: %{ optional(atom) => any } }
+    @type t :: %Yum.Ingredient{ ref: String.t, translation: Yum.Data.translation_tree, exclude_diet: [String.t], exclude_allergen: [String.t], nutrition: %{ optional(String.t) => any } }
 
     @spec new(Yum.Data.ingredient_tree) :: [t]
     def new(data), do: Enum.reduce(data, [], &new(&1, &2, %Yum.Ingredient{}))
@@ -17,7 +17,7 @@ defmodule Yum.Ingredient do
     defp new({ key, value = %{ __info__: info } }, ingredients, group) do
         ingredient = %Yum.Ingredient{
             ref: "#{group.ref}/#{key}",
-            translation: info.translation
+            translation: info["translation"] || %{}
         }
         |> new_exclude_diet(info, group)
         |> new_exclude_allergen(value, group)
@@ -27,13 +27,13 @@ defmodule Yum.Ingredient do
     end
     defp new(_, ingredients, _), do: ingredients
 
-    defp new_exclude_diet(ingredient, %{ "exclude-diet": diets }, parent), do: %{ ingredient | exclude_diet: Enum.uniq(diets ++ parent.exclude_diet) }
+    defp new_exclude_diet(ingredient, %{ "exclude-diet" => diets }, parent), do: %{ ingredient | exclude_diet: Enum.uniq(diets ++ parent.exclude_diet) }
     defp new_exclude_diet(ingredient, _, parent), do: %{ ingredient | exclude_diet: parent.exclude_diet }
 
-    defp new_exclude_allergen(ingredient, %{ "exclude-allergen": allergens }, parent), do: %{ ingredient | exclude_allergen: Enum.uniq(allergens ++ parent.exclude_allergen) }
+    defp new_exclude_allergen(ingredient, %{ "exclude-allergen" => allergens }, parent), do: %{ ingredient | exclude_allergen: Enum.uniq(allergens ++ parent.exclude_allergen) }
     defp new_exclude_allergen(ingredient, _, parent), do: %{ ingredient | exclude_allergen: parent.exclude_allergen }
 
-    defp new_nutrition(ingredient, %{ "nutrition": nutrition }), do: %{ ingredient | nutrition: nutrition }
+    defp new_nutrition(ingredient, %{ "nutrition" => nutrition }), do: %{ ingredient | nutrition: nutrition }
     defp new_nutrition(ingredient, _), do: ingredient
 
     defp create_parent_ref([_|groups]), do: create_parent_ref(groups, "")
