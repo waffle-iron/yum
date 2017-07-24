@@ -7,8 +7,8 @@ defmodule Yum.Data do
     @type diet_list :: [String.t]
     @type allergen_list :: [String.t]
     @type nutrition :: %{ optional(String.t) => any }
-    @type ingredient_tree :: %{ optional(String.t) => ingredient_tree, optional(:__info__) => %{ optional(String.t) => translation_tree | diet_list | allergen_list | nutrition } }
-    @type cuisine_tree :: %{ optional(String.t) => cuisine_tree, optional(:__info__) => %{ optional(String.t) => translation_tree | nutrition } }
+    @type ingredient_tree :: %{ optional(String.t) => ingredient_tree, required(:__info__) => %{ optional(String.t) => translation_tree | diet_list | allergen_list | nutrition } }
+    @type cuisine_tree :: %{ optional(String.t) => cuisine_tree, required(:__info__) => %{ optional(String.t) => translation_tree | nutrition } }
 
     defp load(path), do: TomlElixir.parse_file!(path)
 
