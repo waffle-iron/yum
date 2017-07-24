@@ -30,8 +30,8 @@ defmodule Yum.Ingredient do
             translation: info["translation"] || %{}
         }
         |> new_exclude_diet(info, group)
-        |> new_exclude_allergen(value, group)
-        |> new_nutrition(value)
+        |> new_exclude_allergen(info, group)
+        |> new_nutrition(info)
 
         [ingredient|Enum.reduce(value, ingredients, &new(&1, &2, ingredient))]
     end
